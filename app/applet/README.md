@@ -30,15 +30,15 @@ The application follows a structured, sequential workflow to guide students from
 
 ```mermaid
 graph TD
-    A["User Authentication"] -->|"Login/Signup via Firebase"| B("Dashboard")
-    B --> C{"Profile Setup"}
-    C -->|"Enter Skills, Domain, Duration"| D["AI Idea Generation Engine"]
-    D -->|"Scores: Match, Innovation, Feasibility"| E["Project Selection"]
-    E -->|"Save Chosen Idea"| F["Project Details Workspace"]
-    F --> G["Generate Technical Blueprint"]
-    G --> H["View Development Roadmap"]
-    G --> I["Context-Aware AI Mentor"]
-    I -->|"Ask Architecture/Coding Questions"| J["Dynamic AI Response"]
+    A[User Authentication] -->|Login/Signup via Firebase| B(Dashboard)
+    B --> C{Profile Setup}
+    C -->|Enter Skills, Domain, Duration| D[AI Idea Generation Engine]
+    D -->|Scores: Match, Innovation, Feasibility| E[Project Selection]
+    E -->|Save Chosen Idea| F[Project Details Workspace]
+    F --> G[Generate Technical Blueprint]
+    G --> H[View Development Roadmap]
+    G --> I[Context-Aware AI Mentor]
+    I -->|Ask Architecture/Coding Questions| J[Dynamic AI Response]
     J --> I
 ```
 
@@ -55,11 +55,11 @@ graph TD
 
 ```mermaid
 graph TD
-    UI["React Frontend (Vite/Tailwind)"] --> Auth["Firebase Authentication"]
-    UI --> API["Express Backend"]
-    API --> FS[("Cloud Firestore")]
-    API --> Gemini["Google Gemini API"]
-    API --> RateLimit["Rate Limiter"]
+    UI[React Frontend] --> Auth[Firebase Authentication]
+    UI --> API[Express Backend]
+    API --> FS[(Cloud Firestore)]
+    API --> Gemini[Google Gemini API]
+    API --> RateLimit[Rate Limiter]
 ```
 
 ### AI Architecture Details
