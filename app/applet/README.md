@@ -24,31 +24,49 @@ AYROJECT AI bridges this gap by acting as a personalized technical mentor. It ta
 
 ---
 
-## 🔄 Workflow & Application Flowchart
+## 🔄 User Workflow & Application Flowchart
 
 The application follows a structured, sequential workflow to guide students from ideation to development:
 
 ```mermaid
 graph TD
-    A[User Authentication] -->|Login/Signup via Firebase| B(Dashboard)
-    B --> C{Profile Setup}
-    C -->|Enter Skills, Domain, Duration| D[AI Idea Generation Engine]
-    D -->|Scores: Match, Innovation, Feasibility| E[Project Selection]
-    E -->|Save Chosen Idea| F[Project Details Workspace]
-    F --> G[Generate Technical Blueprint]
-    G --> H[View Development Roadmap]
-    G --> I[Context-Aware AI Mentor]
-    I -->|Ask Architecture/Coding Questions| J[Dynamic AI Response]
+    A["User Authentication"] -->|"Login/Signup via Firebase"| B("Dashboard")
+    B --> C{"Profile Setup"}
+    C -->|"Enter Skills, Domain, Duration"| D["AI Idea Generation Engine"]
+    D -->|"Scores: Match, Innovation, Feasibility"| E["Project Selection"]
+    E -->|"Save Chosen Idea"| F["Project Details Workspace"]
+    F --> G["Generate Technical Blueprint"]
+    G --> H["View Development Roadmap"]
+    G --> I["Context-Aware AI Mentor"]
+    I -->|"Ask Architecture/Coding Questions"| J["Dynamic AI Response"]
     J --> I
 ```
 
 ### Step-by-Step Workflow:
-1. **Authentication:** The user logs in securely using Firebase Auth.
-2. **Profile Configuration:** The student inputs their current tech stack, proficiency levels, and desired project duration.
-3. **Ideation:** The backend sends this profile to the Gemini AI, which generates multiple project concepts tailored to those exact parameters.
-4. **Selection & Blueprinting:** The user selects an idea. The system then generates a deep architectural blueprint (core features, database design, tech stack recommendations).
-5. **Roadmapping:** A weekly, step-by-step development roadmap is generated to keep the student on track.
-6. **Mentorship:** The student can chat with the AI Mentor, which already knows the blueprint and tech stack, getting precise, context-aware coding help.
+1. **Authentication:** Secure entry via Firebase Auth.
+2. **Profile Generation:** Input academic details, skills, and duration.
+3. **Idea Comparison:** Compare 3-5 distinct project ideas and select the most feasible.
+4. **Blueprint Generation:** Expand the selected idea into a detailed tech spec.
+5. **Mentorship & Execution:** Follow the roadmap and consult the AI Mentor for technical hurdles.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    UI["React Frontend (Vite/Tailwind)"] --> Auth["Firebase Authentication"]
+    UI --> API["Express Backend"]
+    API --> FS[("Cloud Firestore")]
+    API --> Gemini["Google Gemini API"]
+    API --> RateLimit["Rate Limiter"]
+```
+
+### AI Architecture Details
+*   **Server-Side Only**: All `@google/genai` interactions are handled securely on the backend.
+*   **Controlled Generation**: Strict prompt templates using JSON schemas enforce deterministic, machine-readable output.
+*   **Context Injection**: The AI Mentor endpoint dynamically injects the student's profile and previously generated blueprint to maintain strict relevance and avoid generic chatbot behavior.
+*   **Resilient Fallbacks**: Backend wraps model calls (`gemini-3.6-flash`, `gemini-3.1-flash-lite`) in a fallback chain to ensure high availability.
 
 ---
 
@@ -73,10 +91,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
-      // Users can only access and edit their own root profile document
       allow read, write: if request.auth != null && request.auth.uid == userId;
       
-      // Users can only access their own nested projects and mentor chats
       match /projects/{projectId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
         
